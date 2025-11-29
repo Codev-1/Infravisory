@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Fixed Hero + Loader</title>
+
+<style>
+/* RESET */
+*{margin:0;padding:0;box-sizing:border-box;}
+body,html{width:100%;height:100%;overflow:hidden;font-family:Arial;}
+
+/* ------------------ LOADER ------------------ */
+.loader-wrapper{
+  position:fixed;top:0;left:0;width:100%;height:100%;
+  background:#fff;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;z-index:9999;
+  animation:fadeOut .8s ease forwards;animation-delay:3.2s;
+}
+.loader-logo{width:280px;opacity:0;animation:logoFade 1.4s ease-in-out forwards;}
+.loader-bars{display:flex;margin-top:18px;gap:8px;}
+.bar{width:8px;height:32px;background:#008CDB;border-radius:4px;animation:bounce 1s infinite ease-in-out;}
+.bar:nth-child(1) { animation-delay: 0s; }
+.bar:nth-child(2){animation-delay:.2s;}
+.bar:nth-child(3){animation-delay:.4s;}
+
+
+/* Auto-typing text */
+    .loader-text {
+      margin-top: 20px;
+      font-size: 22px;
+      color: #008CDB;
+      opacity: 1;
+    }
+
+    #typeText {
+      border-right: 3px solid #008CDB;
+      padding-right: 5px;
+      white-space: nowrap;
+      overflow: hidden;
+      font-size: 22px;
+      animation: cursorBlink 0.7s infinite;
+    }
+
+    @keyframes cursorBlink {
+      0% { border-color: transparent; }
+      50% { border-color: #008CDB; }
+      100% { border-color: transparent; }
+    }
+
+@keyframes bounce{0%,40%,100%{transform:scaleY(.4);}20%{transform:scaleY(1);}}
+@keyframes logoFade{
+	0%{opacity:0;transform:translateY(20px);}
+	100%{opacity: 1; transform: translateY(0);}
+}
+
+@keyframes fadeOut{
+	0%{opacity:1;visibility: visible;}
+	100%{opacity:0;visibility:hidden;}
+}
+
+/* ------------------ HERO ------------------ */
+.hero{
+  position:relative;height:100vh;width:100%;
+  overflow:hidden;opacity:0;transform:translateY(20px);
+  transition:1s ease;background:#ffffff;
+  display:flex;align-items:center;justify-content:center;
+}
+
+body.loaded .hero{opacity:1;transform:translateY(0);}
+
+/* ENERGY WAVE */
+.energy-wave{
+  position:absolute;top:50%;left:50%;
+  width:900px;height:900px;transform:translate(-50%,-50%);
+  background:radial-gradient(rgba(0,140,219,.25), transparent 70%);
+  border-radius:50%;filter:blur(60px);
+  animation:wavePulse 5s infinite ease-in-out;z-index:1;
+}
+
+@keyframes wavePulse{
+  0%,100%{transform:translate(-50%,-50%) scale(1);opacity:.55;}
+  50%{transform:translate(-50%,-50%) scale(1.25);opacity:.75;}
+}
+
+/* FIXED LOGO */
+.hero-logo-fixed{
+  position:absolute;top:25px;left:35px;width:220px;z-index:10;
+}
+
+/* HAMBURGER */
+.hamburger{
+  position:absolute;top:30px;right:35px;width:35px;height:28px;
+  cursor:pointer;z-index:10;
+}
+.hamburger span{
+  display:block;height:4px;background:#008CDB;
+  margin:6px 0;border-radius:4px;transition:.4s;
+}
+.hamburger.active span:nth-child(1){transform:translateY(10px) rotate(45deg);}
+.hamburger.active span:nth-child(2){opacity:0;}
+.hamburger.active span:nth-child(3){transform:translateY(-10px) rotate(-45deg);}
+
+/* ------------------ SIDE MENU ------------------ */
+.side-menu{
+  position:fixed;top:0;right:-320px;width:320px;height:100vh;
+  background:rgba(1, 1, 1, 0.15);backdrop-filter:blur(18px);
+  padding:100px 40px;border-left:2px solid rgba(255,255,255,0.3);
+  transition:.5s ease;z-index:9;
+}
+.side-menu.active{right:0;}
+
+.side-menu a{
+  display:block;font-size:22px;font-weight:bold;margin:20px 0;
+  color:#008CDB;text-decoration:none;letter-spacing:.7px;
+}
+
+/* HERO TEXT CONTENT */
+.hero-content{
+  z-index:5;text-align:center;
+}
+.hero-content h1{
+  font-size:48px;color:#008CDB;margin-bottom:20px;
+}
+.hero-content p{
+  font-size:20px;color:#006BB2;max-width:600px;margin:auto;
+}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  .hero-logo-fixed{width:140px;left:20px;top:20px;}
+  .hamburger{right:20px;top:20px;}
+  .hero-content h1{font-size:32px;}
+  .hero-content p{font-size:16px;padding:0 20px;}
+}
+
+
+/* TYPING CURSOR */
+#typeText {
+  border-right: 3px solid #008CDB;
+  padding-right: 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  font-size: 22px;
+  animation: cursorBlink 0.7s infinite;
+}
+
+@keyframes cursorBlink {
+  0% { border-color: transparent; }
+  50% { border-color: #008CDB; }
+  100% { border-color: transparent; }
+}
+
+
+
+</style>
+</head>
+
+<body>
+
+<!-- LOADER -->
+<div class="loader-wrapper">
+  <img src="img/logo.png" class="loader-logo">
+  <div class="loader-bars">
+    <div class="bar"></div><div class="bar"></div><div class="bar"></div>
+  </div>
+  <div class="loader-text">
+  <span id="typeText"></span>
+  </div>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+
+  <div class="energy-wave"></div>
+
+  <img src="img/logo.png" class="hero-logo-fixed">
+
+  <div class="hamburger" id="hamburgerBtn" onclick="toggleMenuUpdated()">
+    <span></span><span></span><span></span>
+  </div>
+
+  <div class="side-menu" id="sideMenu">
+    <a href="#">Home</a>
+    <a href="about.html">About Us</a>
+
+    <a href="#">Awareness Campaigns</a>
+    <a href="#">Training Campaigns</a>
+    <a href="#">Consultation</a>
+    <a href="#">Contact Us</a>
+  </div>
+
+  <!-- HERO TEXT CONTENT -->
+  <div class="hero-content">
+    <h1>Powering a Sustainable Tomorrow</h1>
+    <p>We provide innovative renewable energy solutions, awareness programs and training campaigns to shape a greener future.</p>
+  </div>
+
+</section>
+
+<script>
+
+
+// Auto Typing Effect for Loader Text
+const typingText = "Renewable Energy Sector | Delivering Insightful Advisory Services";
+const typeTarget = document.getElementById("typeText");
+
+let i = 0;
+function typeWriter() {
+    if (i < typingText.length) {
+        typeTarget.textContent += typingText.charAt(i);
+        i++;
+        setTimeout(typeWriter, 55); // typing speed
+    }
+}
+
+// Start typing after slight delay
+setTimeout(typeWriter, 800);
+
+
+
+
+/* Loader → Hero Reveal */
+
+window.addEventListener("load",()=>{
+  setTimeout(()=>{document.body.classList.add("loaded");},3000);
+});
+
+
+/* Hamburger Menu Toggle */
+
+const burger=document.getElementById("hamburgerBtn");
+const menu=document.getElementById("sideMenu");
+
+function toggleMenuUpdated(){
+  burger.classList.toggle("active");
+  menu.classList.toggle("active");
+}
+
+
+</script>
+
+</body>
+</html>
